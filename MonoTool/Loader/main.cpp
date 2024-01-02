@@ -1,6 +1,6 @@
+#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 #include <Windows.h>
 #include "detours.h"
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 #define EXE_NAME L"ONE.exe"
 #define DLL_NAME "MonoEnableDebugger.dll"
 

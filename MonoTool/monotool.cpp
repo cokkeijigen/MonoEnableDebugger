@@ -10,6 +10,7 @@ namespace mono {
 
 	void initialize(const void* monomod) {
 		if (monomod == nullptr) return;
+		mono_set_defaults = (p_mono_set_defaults)GetProcAddress((HMODULE)monomod, "mono_set_defaults");
 		mono_jit_parse_options = (p_mono_jit_parse_options)GetProcAddress((HMODULE)monomod, "mono_jit_parse_options");
 		mono_debug_init = (p_mono_debug_init)GetProcAddress((HMODULE)monomod, "mono_debug_init");
 	}

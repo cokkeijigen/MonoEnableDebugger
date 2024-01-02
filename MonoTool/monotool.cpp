@@ -10,7 +10,7 @@ namespace mono {
 	HMODULE MONO_MODULE = NULL;
 
 	template<typename type>
-	static inline type getp(LPCSTR name) {
+	static inline type getp(const char* name) {
 		return (type)GetProcAddress(MONO_MODULE, name);
 	}
 

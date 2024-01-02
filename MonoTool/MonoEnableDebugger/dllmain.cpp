@@ -14,9 +14,8 @@ namespace Hook {
         typedef HMODULE(WINAPI* LoadLibraryA)( LPCSTR lpLibFileName);
     }
 
-    static void TryEnableDebugger(const std::filesystem::path dll, const void* hMod) {
-        std::wstring name = dll.filename().wstring();
-        if (name.find(L"mono") != std::wstring::npos) {
+    static void TryMonoEnableDebugger(const std::filesystem::path dll, const void* hMod) {
+        if (dll.filename().wstring().find(L"mono") != std::wstring::npos) {
             mono::initialize(hMod);
             mono::enable_debugger();
         }
@@ -25,21 +24,21 @@ namespace Hook {
     ApiTy::LoadLibraryExW OldLoadLibraryExW;
     static HMODULE WINAPI NewLoadLibraryExW(LPCWSTR lpLibFileName, HANDLE hFile, DWORD dwFlags) {
         HMODULE hMod = OldLoadLibraryExW(lpLibFileName, hFile, dwFlags);
-        TryEnableDebugger(lpLibFileName, hMod);
+        TryMonoEnableDebugger(lpLibFileName, hMod);
         return hMod;
     };
 
     ApiTy::LoadLibraryA OldLoadLibraryA;
     static HMODULE WINAPI NewLoadLibraryA(LPCSTR lpLibFileName) {
         HMODULE hMod = OldLoadLibraryA(lpLibFileName);
-        TryEnableDebugger(lpLibFileName, hMod);
+        TryMonoEnableDebugger(lpLibFileName, hMod);
         return hMod;
     }
 
     ApiTy::LoadLibraryW OldLoadLibraryW;
     static HMODULE WINAPI NewLoadLibraryW(LPCWSTR lpLibFileName) {
         HMODULE hMod = OldLoadLibraryW(lpLibFileName);
-        TryEnableDebugger(lpLibFileName, hMod);
+        TryMonoEnableDebugger(lpLibFileName, hMod);
         return hMod;
     }
 

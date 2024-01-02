@@ -1,9 +1,9 @@
 #pragma once
 #define MONO_CALL __cdecl
-#define NEW_UNITY_MONO 1
+#define NEW_MONO_VER 1
 
 namespace mono {
-#if NEW_UNITY_MONO == 1
+#if NEW_MONO_VER == 1
     static const char* options[1] = { "--debugger-agent=transport=dt_socket,server=y,address=127.0.0.1:55555,suspend=n" };
 #else
     static const char* options[1] = { "--debugger-agent=transport=dt_socket,server=y,address=127.0.0.1:55555,defer=y" };

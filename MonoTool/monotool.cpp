@@ -4,15 +4,22 @@
 
 namespace mono {
 	
-	p_mono_set_defaults mono_set_defaults = nullptr;
-	p_mono_jit_parse_options mono_jit_parse_options = nullptr;
-	p_mono_debug_init mono_debug_init = nullptr;
+	_mono_func p_mono_set_defaults mono_set_defaults = nullptr;
+	_mono_func p_mono_jit_parse_options mono_jit_parse_options = nullptr;
+	_mono_func p_mono_debug_init mono_debug_init = nullptr;
+	HMODULE MONO_MODULE = NULL;
+
+	template<typename type>
+	static inline type getp(LPCSTR name) {
+		return (type)GetProcAddress(MONO_MODULE, name);
+	}
 
 	void initialize(const void* monomod) {
 		if (monomod == nullptr) return;
-		mono_set_defaults = (p_mono_set_defaults)GetProcAddress((HMODULE)monomod, "mono_set_defaults");
-		mono_jit_parse_options = (p_mono_jit_parse_options)GetProcAddress((HMODULE)monomod, "mono_jit_parse_options");
-		mono_debug_init = (p_mono_debug_init)GetProcAddress((HMODULE)monomod, "mono_debug_init");
+		MONO_MODULE = (HMODULE)monomod;
+		mono_set_defaults	   = getp<p_mono_set_defaults>("mono_set_defaults");
+		mono_jit_parse_options = getp<p_mono_jit_parse_options>("mono_jit_parse_options");
+		mono_debug_init        = getp<p_mono_debug_init>("mono_debug_init");
 	}
 
 	bool enable_debugger() {

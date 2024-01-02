@@ -1,6 +1,7 @@
 #pragma once
 #define MONO_CALL __cdecl
 #define NEW_MONO_VER 1
+#define _mono_func
 
 namespace mono {
 #if NEW_MONO_VER == 1
@@ -12,9 +13,9 @@ namespace mono {
     typedef void(MONO_CALL* p_mono_jit_parse_options)(int argc, const char* argv[]);
     typedef void(MONO_CALL* p_mono_debug_init)(int format);
     
-    extern p_mono_set_defaults      mono_set_defaults;
-    extern p_mono_jit_parse_options mono_jit_parse_options;
-    extern p_mono_debug_init        mono_debug_init;
+    extern _mono_func p_mono_set_defaults      mono_set_defaults;
+    extern _mono_func p_mono_jit_parse_options mono_jit_parse_options;
+    extern _mono_func p_mono_debug_init        mono_debug_init;
 
     extern void initialize(const void* monomod);
     extern bool enable_debugger();

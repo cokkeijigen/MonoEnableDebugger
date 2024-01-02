@@ -14,10 +14,10 @@ namespace Hook {
         typedef HMODULE(WINAPI* LoadLibraryA)( LPCSTR lpLibFileName);
     }
 
-    static void TryEnableDebugger(const std::filesystem::path dll, void* hMod) {
+    static void TryEnableDebugger(const std::filesystem::path dll, const void* hMod) {
         std::wstring name = dll.filename().wstring();
         if (name.find(L"mono") != std::wstring::npos) {
-            mono::initialize((void*)hMod);
+            mono::initialize(hMod);
             mono::enable_debugger();
         }
     }
@@ -71,7 +71,7 @@ extern "C" __declspec(dllexport) void hook(void) { }
 BOOL APIENTRY DllMain(HMODULE, DWORD  ul_reason_for_call, LPVOID) {
     switch (ul_reason_for_call)
     {
-    case DLL_PROCESS_ATTACH: {
+    case DLL_PROCESS_ATTACH:
     #ifdef _DEBUG
         AllocConsole();
         (void)freopen("CONOUT$", "w", stdout);
@@ -80,7 +80,6 @@ BOOL APIENTRY DllMain(HMODULE, DWORD  ul_reason_for_call, LPVOID) {
         Hook::Init();
         Hook::Start();
         break;
-    }
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
     case DLL_PROCESS_DETACH:

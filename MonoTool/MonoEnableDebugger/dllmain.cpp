@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define WIN32_LEAN_AND_MEAN
+#define SIGNATURE L"mono"
 #include <iostream>
 #include <filesystem>
 #include <windows.h>
@@ -15,7 +16,7 @@ namespace Hook {
     }
 
     static void TryMonoEnableDebugger(const std::filesystem::path dll, const void* hMod) {
-        if (dll.filename().wstring().find(L"mono") != std::wstring::npos) {
+        if (dll.filename().wstring().find(SIGNATURE) != std::wstring::npos) {
             mono::initialize(hMod);
             mono::enable_debugger();
         }

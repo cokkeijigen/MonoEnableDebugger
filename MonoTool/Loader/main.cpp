@@ -16,4 +16,5 @@ int main(int, char**) {
 		CloseHandle(pi.hThread);
 		CloseHandle(pi.hProcess);
 	}
+	return 0;
 }

@@ -27,7 +27,6 @@ target_include_directories(LAUNCHER
 	PUBLIC "${SOURCE_DIR}/detours")
 target_link_libraries(LAUNCHER 
 	${LIBDETOURS})
-	message(${LIBDETOURS})
 
 add_library(DLLMAIN SHARED 
 	"${SOURCE_DIR}/dllmain.cpp"

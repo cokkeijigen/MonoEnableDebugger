@@ -1,0 +1,41 @@
+cmake_minimum_required(VERSION 3.20.0)
+project(MonoEnableDebugger)
+
+set(CMAKE_CXX_STANDARD 20)
+set(OLD_VERSION_MONO false)
+
+if (MSVC)
+	add_compile_options("/source-charset:utf-8")
+endif(MSVC)
+
+set(SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
+
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	set(LIBDETOURS "${SOURCE_DIR}/detours/detours_x64.lib")
+else()
+	set(LIBDETOURS "${SOURCE_DIR}/detours/detours_x86.lib")
+endif()
+
+add_definitions("-DPROJECT_NAME=\"${PROJECT_NAME}\"")
+add_definitions("-DOLD_VERSION_MONO=${OLD_VERSION_MONO}")
+
+add_executable(LAUNCHER 
+	"${SOURCE_DIR}/launcher.cpp")
+set_target_properties(LAUNCHER 
+	PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+target_include_directories(LAUNCHER 
+	PUBLIC "${SOURCE_DIR}/detours")
+target_link_libraries(LAUNCHER 
+	${LIBDETOURS})
+	message(${LIBDETOURS})
+
+add_library(DLLMAIN SHARED 
+	"${SOURCE_DIR}/dllmain.cpp"
+	"${SOURCE_DIR}/utils/mono_utils.cpp")
+set_target_properties(DLLMAIN 
+	PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+target_include_directories(DLLMAIN 
+	PUBLIC "${SOURCE_DIR}/detours"
+	"${SOURCE_DIR}/utils")
+target_link_libraries(DLLMAIN 
+	${LIBDETOURS})

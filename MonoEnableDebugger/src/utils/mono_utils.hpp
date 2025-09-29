@@ -8,8 +8,11 @@
 #define MONOCALL __cdecl
 #endif
 
+#include <type_traits>
+#include <optional>
+
 #if not OLD_VERSION_MONO
-namespace mono_utils {
+namespace mono {
 	struct options
 	{
 		inline static const char* value[]{ "--debugger-agent=transport=dt_socket,server=y,address=127.0.0.1:56000,suspend=y" };
@@ -26,22 +29,47 @@ namespace mono_utils {
 }
 #endif
 
-namespace mono_utils {
-
+namespace mono 
+{
 	struct mono_jit_parse_options
 	{
-		static auto monocall func(int argc, const char* argv[]) -> size_t;
 		static inline constexpr char name[]{ "mono_jit_parse_options" };
+		static auto monocall func(int argc, const char* argv[]) -> size_t {};
 		static inline decltype(func)* call{ nullptr };
 	};
 
 	struct mono_debug_init
 	{
-		static auto monocall func(int format) -> void;
 		static inline constexpr char name[]{ "mono_debug_init" };
+		static auto monocall func(int format) -> void {};
 		static inline decltype(func)* call{ nullptr };
 	};
 
-	extern auto init(const void* monomod) -> void;
-	extern auto enable_debugger() -> bool;
+	template<class T, class ...V, class R = std::invoke_result_t<decltype(T::call), V...>>
+	inline auto trycall(V&&... args) -> std::conditional_t<std::is_void_v<R>, R, std::optional<R>>
+	{
+
+		if constexpr (std::is_void_v<R>)
+		{
+			if (T::call != nullptr)
+			{
+				T::call(args...);
+			}
+		}
+		else
+		{
+			if (T::call != nullptr)
+			{
+				return T::call(args...);
+			}
+			return std::nullopt;
+		}
+	}
+
+	namespace utils
+	{
+		extern auto init(const void* monomod) -> void;
+		extern auto enable_debugger() -> bool;
+	}
 }
+

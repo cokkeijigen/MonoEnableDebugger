@@ -2,7 +2,8 @@
 #include <windows.h>
 #include "mono_utils.hpp"
 
-namespace mono_utils {
+namespace mono 
+{
 
 
 	struct function_loader
@@ -18,24 +19,8 @@ namespace mono_utils {
 		}
 	};
 
-	auto monocall mono_jit_parse_options::func(int argc, const char* argv[]) -> size_t
-	{
-		if (mono_jit_parse_options::call != nullptr)
-		{
-			return mono_jit_parse_options::call(argc, argv);
-		}
-		return {};
-	}
-
-	auto monocall mono_debug_init::func(int format) -> void
-	{
-		if (mono_debug_init::call != nullptr)
-		{
-			return mono_debug_init::call(format);
-		}
-	}
-
-	auto init(const void* monomod) -> void
+	
+	auto utils::init(const void* monomod) -> void
 	{
 		if (monomod == nullptr) 
 		{
@@ -46,11 +31,11 @@ namespace mono_utils {
 		loader.load_from<mono_debug_init>();
 	}
 
-	auto enable_debugger() -> bool
+	auto utils::enable_debugger() -> bool
 	{
-		mono_jit_parse_options::func(mono_utils::options::size, mono_utils::options::value);
-		mono_debug_init::func(0x01);
-		return false;
+		mono::trycall<mono_jit_parse_options>(mono::options::size, mono::options::value);
+		mono::trycall<mono_debug_init>(0x01);
+		return true;
 	}
 
 }

@@ -15,8 +15,8 @@ extern "C"
 				std::wstring_view name{ lpLibFileName };
 				if (name.find(L"mono") != std::wstring_view::npos)
 				{
-					mono_utils::init(reinterpret_cast<void*>(hMod));
-					mono_utils::enable_debugger();
+					mono::utils::init(reinterpret_cast<void*>(hMod));
+					mono::utils::enable_debugger();
 				}
 			}
 			return { hMod };
@@ -30,8 +30,8 @@ extern "C"
 				std::string_view name{ lpLibFileName };
 				if (name.find("mono") != std::wstring_view::npos)
 				{
-					mono_utils::init(reinterpret_cast<void*>(hMod));
-					mono_utils::enable_debugger();
+					mono::utils::init(reinterpret_cast<void*>(hMod));
+					mono::utils::enable_debugger();
 				}
 			}
 			return { hMod };
@@ -46,8 +46,8 @@ extern "C"
 				std::wstring_view name{ lpLibFileName };
 				if (name.find(L"mono") != std::wstring_view::npos)
 				{
-					mono_utils::init(reinterpret_cast<void*>(hMod));
-					mono_utils::enable_debugger();
+					mono::utils::init(reinterpret_cast<void*>(hMod));
+					mono::utils::enable_debugger();
 				}
 			}
 			return { hMod };

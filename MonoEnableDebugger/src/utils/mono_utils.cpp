@@ -5,7 +5,6 @@
 namespace mono 
 {
 
-
 	struct function_loader
 	{
 		void* monomod;
@@ -33,8 +32,8 @@ namespace mono
 
 	auto utils::enable_debugger() -> bool
 	{
-		mono::trycall<mono_jit_parse_options>(mono::options::size, mono::options::value);
-		mono::trycall<mono_debug_init>(0x01);
+		trycall<mono_jit_parse_options>(options::size, options::value);
+		trycall<mono_debug_init>(0x01);
 		return true;
 	}
 

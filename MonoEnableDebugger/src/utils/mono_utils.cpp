@@ -19,7 +19,7 @@ namespace mono
 	};
 
 	
-	auto utils::init(const void* monomod) -> void
+	auto init(const void* monomod) -> void
 	{
 		if (monomod == nullptr) 
 		{

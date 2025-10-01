@@ -35,8 +35,11 @@ namespace mono
 	enum: int
 	{
 		mono_debug_format_none = 0x00,
+		MONO_DEBUG_FORMAT_NONE = 0x00,
 		mono_debug_format_mono = 0x01,
+		MONO_DEBUG_FORMAT_MONO = 0x01,
 		mono_debug_format_debugger = 0x02,
+		MONO_DEBUG_FORMAT_DEBUGGER = 0x02,
 	};
 
 	struct mono_jit_parse_options

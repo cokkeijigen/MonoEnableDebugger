@@ -5,8 +5,25 @@
 
 extern "C" 
 {
+
 	namespace Hooks
 	{
+
+		static auto WINAPI LoadLibraryExA(LPCSTR lpLibFileName, HANDLE hFile, DWORD dwFlags) -> HMODULE
+		{
+			auto hMod{ Patch::Hooker::Call<Hooks::LoadLibraryExA>(lpLibFileName, hFile, dwFlags) };
+			if (hMod != nullptr)
+			{
+				std::string_view name{ lpLibFileName };
+				if (name.find("mono") != std::wstring_view::npos)
+				{
+					mono::init(reinterpret_cast<void*>(hMod));
+					mono::utils::enable_debugger();
+				}
+			}
+			return { hMod };
+		}
+
 		static auto WINAPI LoadLibraryExW(LPCWSTR lpLibFileName, HANDLE hFile, DWORD dwFlags) -> HMODULE
 		{
 			auto hMod{ Patch::Hooker::Call<Hooks::LoadLibraryExW>(lpLibFileName, hFile, dwFlags) };
@@ -15,7 +32,7 @@ extern "C"
 				std::wstring_view name{ lpLibFileName };
 				if (name.find(L"mono") != std::wstring_view::npos)
 				{
-					mono::utils::init(reinterpret_cast<void*>(hMod));
+					mono::init(reinterpret_cast<void*>(hMod));
 					mono::utils::enable_debugger();
 				}
 			}
@@ -30,7 +47,7 @@ extern "C"
 				std::string_view name{ lpLibFileName };
 				if (name.find("mono") != std::wstring_view::npos)
 				{
-					mono::utils::init(reinterpret_cast<void*>(hMod));
+					mono::init(reinterpret_cast<void*>(hMod));
 					mono::utils::enable_debugger();
 				}
 			}
@@ -46,7 +63,7 @@ extern "C"
 				std::wstring_view name{ lpLibFileName };
 				if (name.find(L"mono") != std::wstring_view::npos)
 				{
-					mono::utils::init(reinterpret_cast<void*>(hMod));
+					mono::init(reinterpret_cast<void*>(hMod));
 					mono::utils::enable_debugger();
 				}
 			}
@@ -63,6 +80,7 @@ extern "C"
 		if (ul_reason_for_call == DLL_PROCESS_ATTACH)
 		{
 			Patch::Hooker::Begin();
+			Patch::Hooker::Add<Hooks::LoadLibraryExA>(::LoadLibraryExA);
 			Patch::Hooker::Add<Hooks::LoadLibraryExW>(::LoadLibraryExW);
 			Patch::Hooker::Add<Hooks::LoadLibraryA>(::LoadLibraryA);
 			Patch::Hooker::Add<Hooks::LoadLibraryW>(::LoadLibraryW);

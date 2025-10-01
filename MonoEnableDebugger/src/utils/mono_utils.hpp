@@ -20,7 +20,7 @@ namespace mono {
 	};
 }
 #else
-namespace mono_utils {
+namespace mono {
 	struct options
 	{
 		inline static const char* value[]{ "--debugger-agent=transport=dt_socket,server=y,address=127.0.0.1:56000,defer=y" };
@@ -31,6 +31,14 @@ namespace mono_utils {
 
 namespace mono 
 {
+	
+	enum: int
+	{
+		mono_debug_format_none = 0x00,
+		mono_debug_format_mono = 0x01,
+		mono_debug_format_debugger = 0x02,
+	};
+
 	struct mono_jit_parse_options
 	{
 		static inline constexpr char name[]{ "mono_jit_parse_options" };

@@ -33,7 +33,7 @@ namespace mono
 	auto utils::enable_debugger() -> bool
 	{
 		trycall<mono_jit_parse_options>(options::size, options::value);
-		trycall<mono_debug_init>(0x01);
+		trycall<mono_debug_init>(mono_debug_format_mono);
 		return true;
 	}
 

@@ -66,9 +66,10 @@ namespace mono
 		}
 	}
 
+	extern auto init(const void* monomod) -> void;
+
 	namespace utils
 	{
-		extern auto init(const void* monomod) -> void;
 		extern auto enable_debugger() -> bool;
 	}
 }

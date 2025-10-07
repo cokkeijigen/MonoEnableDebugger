@@ -23,7 +23,7 @@ namespace mono {
 namespace mono {
 	struct options
 	{
-		inline static const char* value[]{ "--debugger-agent=transport=dt_socket,server=y,address=127.0.0.1:56000,defer=y" };
+		inline static const char* value[]{ "--debugger-agent=transport=dt_socket,server=y,address=127.0.0.1:56000,defer=n" };
 		inline static constexpr auto size{ sizeof(value) / sizeof(char*) };
 	};
 }
